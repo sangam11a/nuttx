@@ -923,6 +923,10 @@ config MTD_MT25QL
 		
 if MTD_MT25QL
 
+config MT25QL_SPI_PIN_NUMBER
+	int "MT25QL SPI PIN NUMBER"
+	default 3
+
 config MT25QL_SPIMODE
 	int "MT25QL SPI Mode"
 	default 0

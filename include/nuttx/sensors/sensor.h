@@ -480,12 +480,27 @@ struct sensor_gyro          /* Type: Gyroscope */
 
 struct sensor_mag           /* Type: Magnetic Field */
 {
-  uint64_t timestamp;       /* Units is microseconds */
-  float x;                  /* Axis X in Gauss or micro Tesla (uT) */
-  float y;                  /* Axis Y in Gauss or micro Tesla (uT) */
-  float z;                  /* Axis Z in Gauss or micro Tesla (uT) */
-  float temperature;        /* Temperature in degrees celsius */
-  int32_t status;           /* Status of calibration */
+  // uint64_t timestamp;       /* Units is microseconds */
+  // float x;                  /* Axis X in Gauss or micro Tesla (uT) */
+  // float y;                  /* Axis Y in Gauss or micro Tesla (uT) */
+  // float z;                  /* Axis Z in Gauss or micro Tesla (uT) */
+  // float temperature;        /* Temperature in degrees celsius */
+  // int32_t status;     
+        /* Status of calibration */
+  uint64_t timestamp;
+  float acc_x;
+  float acc_y;
+  float acc_z;
+  float temp;
+  float gyro_x;
+  float gyro_y;
+  float gyro_z;
+  float mag_x;
+  float mag_y;
+  float mag_z;
+  float temperature;
+  int32_t status;     
+
 };
 
 struct sensor_baro          /* Type: Barometer */
@@ -681,6 +696,20 @@ struct sensor_ots           /* Type: OTS */
   uint64_t timestamp;       /* Unit is microseconds */
   int32_t x;                /* Axis X in counts */
   int32_t y;                /* Axis Y in counts */
+};
+struct mpu6500_imu{
+ uint64_t timestamp;
+  float acc_x;
+  float acc_y;
+  float acc_z;
+  float temp;
+  float gyro_x;
+  float gyro_y;
+  float gyro_z;
+  float mag_x;
+  float mag_y;
+  float mag_z;
+  float temperature;
 };
 
 struct sensor_gps_satellite
