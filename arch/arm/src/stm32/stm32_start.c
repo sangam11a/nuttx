@@ -122,6 +122,7 @@ void __start(void)
 
   /* If enabled reset the MPU */
 
+
   mpu_early_reset();
 
   /* Configure the UART so that we can get debug output as soon as possible */

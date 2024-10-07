@@ -185,10 +185,10 @@ static void ads7953_read16(FAR struct ads7953_dev_s *priv, uint8_t *cmd, uint8_t
 
 static int ads7953_open(FAR struct file *filep)
 {
-  printf("Opening the ads7953 file");
+  // printf("Opening the ads7953 file");
   FAR struct inode *inode = filep->f_inode;
   FAR struct ads7953_dev_s *priv = inode->i_private;
-  printf("Opened the ADS7953 file \n");
+  // printf("Opened the ADS7953 file \n");
   return OK;
 }
 
