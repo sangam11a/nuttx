@@ -108,10 +108,10 @@ static void lis3mdl_reset(FAR struct lis3mdl_dev_s *dev);
 static void lis3mdl_read_measurement_data(FAR struct lis3mdl_dev_s *dev,
                                           FAR struct lis3mdl_data_s *data);
 static void lis3mdl_read_magnetic_data(FAR struct lis3mdl_dev_s *dev,
-                                       uint16_t *x_mag, uint16_t *y_mag,
-                                       uint16_t *z_mag);
+                                       int16_t *x_mag, int16_t *y_mag,
+                                       int16_t *z_mag);
 static void lis3mdl_read_temperature(FAR struct lis3mdl_dev_s *dev,
-                                     uint16_t *temperature);
+                                     int16_t *temperature);
 static int lis3mdl_push_data(FAR struct lis3mdl_dev_s *dev,
                              FAR struct lis3mdl_data_s *data);
 /* sensor methods */
@@ -267,15 +267,15 @@ static void lis3mdl_read_measurement_data(FAR struct lis3mdl_dev_s *dev,
 {
   /* Magnetic data */
 
-  uint16_t x_mag = 0;
-  uint16_t y_mag = 0;
-  uint16_t z_mag = 0;
+  int16_t x_mag = 0;
+  int16_t y_mag = 0;
+  int16_t z_mag = 0;
 
   lis3mdl_read_magnetic_data(dev, &x_mag, &y_mag, &z_mag);
 
   /* Temperature */
 
-  uint16_t temperature = 0;
+  int16_t temperature = 0;
 
   lis3mdl_read_temperature(dev, &temperature);
 
@@ -318,8 +318,8 @@ static int lis3mdl_push_data(FAR struct lis3mdl_dev_s *dev,
  ****************************************************************************/
 
 static void lis3mdl_read_magnetic_data(FAR struct lis3mdl_dev_s *dev,
-                                       uint16_t *x_mag, uint16_t *y_mag,
-                                       uint16_t *z_mag)
+                                       int16_t *x_mag, int16_t *y_mag,
+                                       int16_t *z_mag)
 {
   /* Lock the SPI bus so that only one device can access it at the same
    * time
@@ -335,15 +335,16 @@ static void lis3mdl_read_magnetic_data(FAR struct lis3mdl_dev_s *dev,
    * set -> auto increment of address when reading multiple bytes.
    */
   SPI_SEND(dev->spi, (LIS3MDL_OUT_X_L_REG | 0x80 | 0x40)); /* RX */
-  *x_mag = ((uint16_t)(SPI_SEND(dev->spi, 0)) << 0);       /* LSB */
-  *x_mag |= ((uint16_t)(SPI_SEND(dev->spi, 0)) << 8);      /* MSB */
+  *x_mag = ((int16_t)(SPI_SEND(dev->spi, 0)) << 0);       /* LSB */
+  *x_mag |= ((int16_t)(SPI_SEND(dev->spi, 0)) << 8);      /* MSB */
 
-  *y_mag = ((uint16_t)(SPI_SEND(dev->spi, 0)) << 0);  /* LSB */
-  *y_mag |= ((uint16_t)(SPI_SEND(dev->spi, 0)) << 8); /* MSB */
+  *y_mag = ((int16_t)(SPI_SEND(dev->spi, 0)) << 0);  /* LSB */
+  *y_mag |= ((int16_t)(SPI_SEND(dev->spi, 0)) << 8); /* MSB */
 
-  *z_mag = ((uint16_t)(SPI_SEND(dev->spi, 0)) << 0);  /* LSB */
-  *z_mag |= ((uint16_t)(SPI_SEND(dev->spi, 0)) << 8); /* MSB */
-
+  *z_mag = ((int16_t)(SPI_SEND(dev->spi, 0)) << 0);  /* LSB */
+  *z_mag |= ((int16_t)(SPI_SEND(dev->spi, 0)) << 8); /* MSB */
+  
+  // printf("Mag X: %d | Y: %d |Z :%d\n", *x_mag, *y_mag, *z_mag);
   /* Set CS to high which deselects the LIS3MDL */
   SPI_SELECT(dev->spi, dev->config->spi_devid, false);
 
@@ -357,7 +358,7 @@ static void lis3mdl_read_magnetic_data(FAR struct lis3mdl_dev_s *dev,
  ****************************************************************************/
 
 static void lis3mdl_read_temperature(FAR struct lis3mdl_dev_s *dev,
-                                     uint16_t *temperature)
+                                     int16_t *temperature)
 {
   /* Lock the SPI bus so that only one device can access it at the same
    * time
@@ -378,8 +379,8 @@ static void lis3mdl_read_temperature(FAR struct lis3mdl_dev_s *dev,
 
   /* RX */
 
-  *temperature = ((uint16_t)(SPI_SEND(dev->spi, 0)) << 0);  /* LSB */
-  *temperature |= ((uint16_t)(SPI_SEND(dev->spi, 0)) << 8); /* MSB */
+  *temperature = ((int16_t)(SPI_SEND(dev->spi, 0)) << 0);  /* LSB */
+  *temperature |= ((int16_t)(SPI_SEND(dev->spi, 0)) << 8); /* MSB */
 
   /* Set CS to high which deselects the LIS3MDL */
   SPI_SELECT(dev->spi, dev->config->spi_devid, false);
