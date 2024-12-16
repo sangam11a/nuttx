@@ -604,6 +604,22 @@ struct reservation_command{
 
 };
 
+struct command{
+  uint64_t timestamp;
+  char path[100];
+  uint32_t command;
+  uint16_t num_of_packets;
+  uint32_t address;
+  int executed;
+};
+
+struct flash_operation{
+  uint64_t timestamp;
+  uint8_t packet_type;
+  uint8_t packet_number;
+  uint8_t data[80];
+};
+
 struct sensor_hall          /* Type: HALL */
 {
   uint64_t timestamp;       /* Units is microseconds */
