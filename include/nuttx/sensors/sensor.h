@@ -610,7 +610,7 @@ struct command{
   uint32_t command;
   uint16_t num_of_packets;
   uint32_t address;
-  int executed;
+  uint8_t pkt_type;
 };
 
 struct flash_operation{
