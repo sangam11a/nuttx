@@ -792,6 +792,7 @@ void nx_start(void)
     {
       /* Perform any processor-specific idle state operations */
 
+
       up_idle();
     }
 #endif
