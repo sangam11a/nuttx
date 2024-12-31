@@ -120,9 +120,7 @@ void __start(void)
                    "r"(CONFIG_IDLETHREAD_STACKSIZE - 64) :);
 #endif
 
-  /* If enabled reset the MPU */
-
-  mpu_early_reset();
+  /* If enabled reset the MPU *  mpu_early_reset();
 
   /* Configure the UART so that we can get debug output as soon as possible */
 
