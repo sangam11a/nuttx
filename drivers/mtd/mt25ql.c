@@ -100,7 +100,7 @@
 
 /* Registers Read Operations */
 
-#define MT25QL_RDDEVID			0x9F	/* READ device id */
+#define MT25QL_RDDEVID			0x9E	/* READ device id */
 #define MT25QL_RDSRFFLSPARAM		0x5A 	/* Read serial flash discovery parameter */
 #define MT25QL_RDSECTPRCT		0x2D	/* Sector protection bits read */
 #define MT25QL_RDVOLLCKBIT		0xE8	/* Volatile lock bits read */
@@ -506,7 +506,7 @@ static inline int mt25ql_readid(FAR struct mt25ql_dev_s *priv)
 	/* deselecting the flash */
 	SPI_SELECT(priv->dev, SPIDEV_FLASH(0), false);
 	mt25ql_unlock(priv->dev);
-    syslog(LOG_DEBUG,"The manufacturer id is %d\n",manufacturer);
+
 	// finfo("Read ID: ");
 	// for(int i=0; i<20; i++){
 	// 	finfo("%02x ", devid[i]);
