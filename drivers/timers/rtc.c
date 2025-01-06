@@ -531,7 +531,7 @@ static int rtc_ioctl(FAR struct file *filep, int cmd, unsigned long arg)
             upperinfo->active = false;
           }
 
-        if (ops->setrelative)
+        if (ops->setrelative )//got an error here
           {
             pid_t pid;
 
