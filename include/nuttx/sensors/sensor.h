@@ -596,6 +596,7 @@ struct sensor_rgb           /* Type: RGB */
 };
 
 struct reservation_command{
+  // uint64_t timestamp;
   uint8_t mcu_id;
 	uint8_t cmd[3];
 	uint8_t time[2];
