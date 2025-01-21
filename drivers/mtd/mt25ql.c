@@ -503,9 +503,20 @@ static inline int mt25ql_readid(FAR struct mt25ql_dev_s *priv)
 	memory = SPI_SEND(priv->dev, MT25QL_DUMMY);
 	capacity = SPI_SEND(priv->dev, MT25QL_DUMMY);
 
+	// SPI_SEND(priv->dev, 0x66);
+	// SPI_SEND(priv->dev, 0x99);
+
+	// SPI_SEND(priv->dev, 0x50);
+	// SPI_SEND(priv->dev, 0x99);
+	// SPI_SEND(priv->dev, 0x7a);
+
+
+
 	/* deselecting the flash */
 	SPI_SELECT(priv->dev, SPIDEV_FLASH(0), false);
 	mt25ql_unlock(priv->dev);
+	printf("Manufacturer is %d\n",manufacturer);
+	
 
 	// finfo("Read ID: ");
 	// for(int i=0; i<20; i++){

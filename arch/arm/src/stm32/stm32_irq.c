@@ -41,6 +41,9 @@
 #include "arm_internal.h"
 #include "stm32.h"
 
+
+#define GPIO_WD_WDI			    (GPIO_OUTPUT|GPIO_FLOAT|GPIO_SPEED_2MHz|GPIO_OUTPUT_CLEAR|GPIO_PORTH|GPIO_PIN2)
+
 /****************************************************************************
  * Pre-processor Definitions
  ****************************************************************************/
@@ -73,56 +76,144 @@
  ****************************************************************************/
 
 #if defined(CONFIG_DEBUG_IRQ_INFO)
+// static void stm32_dumpnvic(const char *msg, int irq)
+// {
+//   irqstate_t flags;
+
+//   flags = enter_critical_section();
+
+//   irqinfo("NVIC (%s, irq=%d):\n", msg, irq);
+//   irqinfo("  INTCTRL:    %08x VECTAB:  %08x\n",
+//           getreg32(NVIC_INTCTRL), getreg32(NVIC_VECTAB));
+// #if 0
+//   irqinfo("  SYSH ENABLE MEMFAULT: %08x BUSFAULT: %08x USGFAULT: %08x "
+//           "SYSTICK: %08x\n",
+//           getreg32(NVIC_SYSHCON_MEMFAULTENA),
+//           getreg32(NVIC_SYSHCON_BUSFAULTENA),
+//           getreg32(NVIC_SYSHCON_USGFAULTENA),
+//           getreg32(NVIC_SYSTICK_CTRL_ENABLE));
+// #endif
+//   irqinfo("  IRQ ENABLE: %08x %08x %08x\n",
+//           getreg32(NVIC_IRQ0_31_ENABLE),
+//           getreg32(NVIC_IRQ32_63_ENABLE),
+//           getreg32(NVIC_IRQ64_95_ENABLE));
+//   irqinfo("  SYSH_PRIO:  %08x %08x %08x\n",
+//           getreg32(NVIC_SYSH4_7_PRIORITY),
+//           getreg32(NVIC_SYSH8_11_PRIORITY),
+//           getreg32(NVIC_SYSH12_15_PRIORITY));
+//   irqinfo("  IRQ PRIO:   %08x %08x %08x %08x\n",
+//           getreg32(NVIC_IRQ0_3_PRIORITY),
+//           getreg32(NVIC_IRQ4_7_PRIORITY),
+//           getreg32(NVIC_IRQ8_11_PRIORITY),
+//           getreg32(NVIC_IRQ12_15_PRIORITY));
+//   irqinfo("              %08x %08x %08x %08x\n",
+//           getreg32(NVIC_IRQ16_19_PRIORITY),
+//           getreg32(NVIC_IRQ20_23_PRIORITY),
+//           getreg32(NVIC_IRQ24_27_PRIORITY),
+//           getreg32(NVIC_IRQ28_31_PRIORITY));
+//   irqinfo("              %08x %08x %08x %08x\n",
+//           getreg32(NVIC_IRQ32_35_PRIORITY),
+//           getreg32(NVIC_IRQ36_39_PRIORITY),
+//           getreg32(NVIC_IRQ40_43_PRIORITY),
+//           getreg32(NVIC_IRQ44_47_PRIORITY));
+//   irqinfo("              %08x %08x %08x %08x\n",
+//           getreg32(NVIC_IRQ48_51_PRIORITY),
+//           getreg32(NVIC_IRQ52_55_PRIORITY),
+//           getreg32(NVIC_IRQ56_59_PRIORITY),
+//           getreg32(NVIC_IRQ60_63_PRIORITY));
+//   irqinfo("              %08x\n",
+//           getreg32(NVIC_IRQ64_67_PRIORITY));
+
+//   leave_critical_section(flags);
+// }
 static void stm32_dumpnvic(const char *msg, int irq)
 {
   irqstate_t flags;
-
+	stm32_configgpio(GPIO_WD_WDI);
+  
   flags = enter_critical_section();
 
-  irqinfo("NVIC (%s, irq=%d):\n", msg, irq);
-  irqinfo("  INTCTRL:    %08x VECTAB:  %08x\n",
-          getreg32(NVIC_INTCTRL), getreg32(NVIC_VECTAB));
-#if 0
-  irqinfo("  SYSH ENABLE MEMFAULT: %08x BUSFAULT: %08x USGFAULT: %08x "
-          "SYSTICK: %08x\n",
-          getreg32(NVIC_SYSHCON_MEMFAULTENA),
-          getreg32(NVIC_SYSHCON_BUSFAULTENA),
-          getreg32(NVIC_SYSHCON_USGFAULTENA),
-          getreg32(NVIC_SYSTICK_CTRL_ENABLE));
-#endif
-  irqinfo("  IRQ ENABLE: %08x %08x %08x\n",
-          getreg32(NVIC_IRQ0_31_ENABLE),
-          getreg32(NVIC_IRQ32_63_ENABLE),
-          getreg32(NVIC_IRQ64_95_ENABLE));
-  irqinfo("  SYSH_PRIO:  %08x %08x %08x\n",
-          getreg32(NVIC_SYSH4_7_PRIORITY),
-          getreg32(NVIC_SYSH8_11_PRIORITY),
-          getreg32(NVIC_SYSH12_15_PRIORITY));
-  irqinfo("  IRQ PRIO:   %08x %08x %08x %08x\n",
-          getreg32(NVIC_IRQ0_3_PRIORITY),
-          getreg32(NVIC_IRQ4_7_PRIORITY),
-          getreg32(NVIC_IRQ8_11_PRIORITY),
-          getreg32(NVIC_IRQ12_15_PRIORITY));
-  irqinfo("              %08x %08x %08x %08x\n",
-          getreg32(NVIC_IRQ16_19_PRIORITY),
-          getreg32(NVIC_IRQ20_23_PRIORITY),
-          getreg32(NVIC_IRQ24_27_PRIORITY),
-          getreg32(NVIC_IRQ28_31_PRIORITY));
-  irqinfo("              %08x %08x %08x %08x\n",
-          getreg32(NVIC_IRQ32_35_PRIORITY),
-          getreg32(NVIC_IRQ36_39_PRIORITY),
-          getreg32(NVIC_IRQ40_43_PRIORITY),
-          getreg32(NVIC_IRQ44_47_PRIORITY));
-  irqinfo("              %08x %08x %08x %08x\n",
-          getreg32(NVIC_IRQ48_51_PRIORITY),
-          getreg32(NVIC_IRQ52_55_PRIORITY),
-          getreg32(NVIC_IRQ56_59_PRIORITY),
-          getreg32(NVIC_IRQ60_63_PRIORITY));
-  irqinfo("              %08x\n",
-          getreg32(NVIC_IRQ64_67_PRIORITY));
+  stm32_gpiowrite(GPIO_WD_WDI, true);
+  irqinfo("  INTCTRL:    %08x ",  getreg32(NVIC_INTCTRL));
+ 
+    // stm32_gpiowrite(GPIO_WD_WDI, true);
+
+  stm32_gpiowrite(GPIO_WD_WDI, false);
+  // irqinfo(" VECTAB:  %08x\n", getreg32(NVIC_VECTAB));
+   getreg32(NVIC_VECTAB);
+
+  stm32_gpiowrite(GPIO_WD_WDI, true);
+  getreg32(NVIC_IRQ0_31_ENABLE);
+
+  stm32_gpiowrite(GPIO_WD_WDI, false);
+  getreg32(NVIC_IRQ32_63_ENABLE);
+
+  stm32_gpiowrite(GPIO_WD_WDI, true);
+  getreg32(NVIC_IRQ64_95_ENABLE);
+
+  stm32_gpiowrite(GPIO_WD_WDI, false);
+  getreg32(NVIC_SYSH4_7_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, true);
+  getreg32(NVIC_SYSH8_11_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, false);
+  getreg32(NVIC_SYSH12_15_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, true);
+  getreg32(NVIC_IRQ0_3_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, false);
+  getreg32(NVIC_IRQ4_7_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, true);
+  getreg32(NVIC_IRQ8_11_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, false);
+  getreg32(NVIC_IRQ12_15_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, true);
+  getreg32(NVIC_IRQ16_19_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, false);
+  getreg32(NVIC_IRQ20_23_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, true);
+  getreg32(NVIC_IRQ24_27_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, false);
+  getreg32(NVIC_IRQ28_31_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, true);
+  getreg32(NVIC_IRQ32_35_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, false);
+  getreg32(NVIC_IRQ36_39_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, true);
+  getreg32(NVIC_IRQ40_43_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, false);
+  getreg32(NVIC_IRQ44_47_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, true);
+  getreg32(NVIC_IRQ48_51_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, false);
+  getreg32(NVIC_IRQ52_55_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, true);
+  getreg32(NVIC_IRQ56_59_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, false);
+  getreg32(NVIC_IRQ60_63_PRIORITY);
+
+  stm32_gpiowrite(GPIO_WD_WDI, true);
+  getreg32(NVIC_IRQ64_67_PRIORITY);
 
   leave_critical_section(flags);
 }
+
 #else
 #  define stm32_dumpnvic(msg, irq)
 #endif
