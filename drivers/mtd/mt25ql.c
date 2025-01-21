@@ -477,6 +477,8 @@ static void mt25ql_writeenable(struct mt25ql_dev_s *priv)
 
 static inline int mt25ql_readid(FAR struct mt25ql_dev_s *priv)
 {
+ toggle_wdg();
+
 	uint8_t manufacturer;
 	uint8_t memory;
 	uint8_t capacity;
@@ -509,6 +511,7 @@ static inline int mt25ql_readid(FAR struct mt25ql_dev_s *priv)
 	// SPI_SEND(priv->dev, 0x50);
 	// SPI_SEND(priv->dev, 0x99);
 	// SPI_SEND(priv->dev, 0x7a);
+ toggle_wdg();
 
 
 
