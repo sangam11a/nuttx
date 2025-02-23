@@ -511,7 +511,7 @@ static inline int mt25ql_readid(FAR struct mt25ql_dev_s *priv)
 	// SPI_SEND(priv->dev, 0x50);
 	// SPI_SEND(priv->dev, 0x99);
 	// SPI_SEND(priv->dev, 0x7a);
- toggle_wdg();
+ 		toggle_wdg();
 
 
 
