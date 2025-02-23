@@ -333,26 +333,40 @@ ssize_t up_progmem_eraseblock(size_t block)
     {
       return -EFAULT;
     }
+    toggle_wdg();
 
   nxmutex_lock(&g_lock);
 
   /* Get flash ready and begin erasing single block */
+  toggle_wdg();
 
   flash_unlock();
-
+  toggle_wdg();
   modifyreg32(STM32_FLASH_CR, 0, FLASH_CR_SER);
+  toggle_wdg();
+
   modifyreg32(STM32_FLASH_CR, FLASH_CR_SNB_MASK, FLASH_CR_SNB(block));
+  
+  toggle_wdg();
   modifyreg32(STM32_FLASH_CR, 0, FLASH_CR_STRT);
+  toggle_wdg();
 
   while (getreg32(STM32_FLASH_SR) & FLASH_SR_BSY)
     {
       stm32_waste();
+  toggle_wdg();
+  // printf("inside getreg32 while loop\n");
+
     }
+    toggle_wdg();
 
   modifyreg32(STM32_FLASH_CR, FLASH_CR_SER, 0);
+  toggle_wdg();
+
   nxmutex_unlock(&g_lock);
 
   /* Verify */
+  toggle_wdg();
 
   if (up_progmem_ispageerased(block) == 0)
     {
