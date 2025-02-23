@@ -353,8 +353,8 @@ ssize_t up_progmem_eraseblock(size_t block)
   while (getreg32(STM32_FLASH_SR) & FLASH_SR_BSY)
     {
       stm32_waste();
-  // printf("inside getreg32 while loop\n");
-
+  //   printf("inside getreg32 while loop\n");
+      toggle_wdg();
     }
     toggle_wdg();
 
