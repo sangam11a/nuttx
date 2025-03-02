@@ -1319,6 +1319,58 @@ FAR struct mtd_dev_s *mt25ql_initialize(FAR struct spi_dev_s *dev)
       /* Identify the FLASH chip and get its capacity */
 
       ret = mt25ql_readid(priv);
+      
+    }
+
+  /* Return the implementation-specific state structure as the MTD device */
+
+  finfo("Return %p\n", priv);
+  return (FAR struct mtd_dev_s *)priv;
+}
+
+
+FAR struct mtd_dev_s *mt25ql_reset_own(FAR struct spi_dev_s *dev)
+{
+  FAR struct mt25ql_dev_s *priv;
+  int ret;
+
+  finfo("dev: %p\n", dev);
+
+  /* Allocate a state structure (we allocate the structure instead of using
+   * a fixed, static allocation so that we can handle multiple FLASH devices.
+   * The current implementation would handle only one FLASH part per SPI
+   * device (only because of the SPIDEV_FLASH(0) definition) and so would
+   * have to be extended to handle multiple FLASH parts on the same SPI bus.
+   */
+
+  priv = (FAR struct mt25ql_dev_s *)kmm_zalloc(sizeof(struct mt25ql_dev_s));
+  if (priv)
+    {
+      /* Initialize the allocated structure. (unsupported methods were
+       * nullified by kmm_zalloc).
+       */
+
+      priv->mtd.erase  = mt25ql_erase;
+      priv->mtd.bread  = mt25ql_bread;
+      priv->mtd.bwrite = mt25ql_bwrite;
+      priv->mtd.read   = mt25ql_read;
+#ifdef CONFIG_MTD_BYTE_WRITE
+      priv->mtd.write  = mt25ql_write;
+#endif
+      priv->mtd.ioctl  = mt25ql_ioctl;
+      priv->mtd.name   = "mt25ql";
+      priv->dev        = dev;
+
+      /* Deselect the FLASH */
+
+      SPI_SELECT(dev, SPIDEV_FLASH(0), false);
+
+      /* Identify the FLASH chip and get its capacity */
+
+    //   ret = mt25ql_readid(priv);
+	ret = mt25ql_erase(priv,
+		0x00,
+		10000);
       if (ret != OK)
         {
           /* Unrecognized!
@@ -1336,5 +1388,6 @@ FAR struct mtd_dev_s *mt25ql_initialize(FAR struct spi_dev_s *dev)
   finfo("Return %p\n", priv);
   return (FAR struct mtd_dev_s *)priv;
 }
+
 
 #endif //MT25QL_H_
