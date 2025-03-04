@@ -125,6 +125,7 @@ void __start(void)
   /* Configure the UART so that we can get debug output as soon as possible */
 
 
+  
   stm32_clockconfig();
   arm_fpuconfig();
   stm32_lowsetup();

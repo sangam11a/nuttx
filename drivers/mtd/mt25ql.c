@@ -1370,7 +1370,7 @@ FAR struct mtd_dev_s *mt25ql_reset_own(FAR struct spi_dev_s *dev)
     //   ret = mt25ql_readid(priv);
 	ret = mt25ql_erase(priv,
 		0x00,
-		10000);
+		5000);
       if (ret != OK)
         {
           /* Unrecognized!
