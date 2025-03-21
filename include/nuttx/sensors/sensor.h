@@ -538,61 +538,60 @@ struct sensor_temp          /* Type: Ambient Temperature */
 struct sensor_rgb           /* Type: RGB */
 {
   uint64_t timestamp;       /* Units is microseconds */
-  // float r;                  /* Units is percent */
-  // float g;                  /* Units is percent */
-  // float b;                  /* Units is percent */
-   int16_t accl_x;
-  int16_t accl_y;
-  int16_t accl_z;
-  int16_t gyro_x;
-  int16_t gyro_y;
-  int16_t gyro_z;
-  int16_t mag_x;
-  int16_t mag_y;
-  int16_t mag_z;
-  int16_t temp_x;
-  int16_t temp_x1;
-  int16_t temp_y;
-  int16_t temp_y1;
-  int16_t temp_z;
-  int16_t temp_z1;
-  int16_t temp_bpb;
-  int16_t temp_obc;
-  int16_t temp_com;
-  int16_t temp_batt;
-  int16_t batt_volt;
-  int16_t sol_p1_v;
-  int16_t sol_p2_v;
-  int16_t sol_p3_v;
-  int16_t sol_p4_v;
-  int16_t sol_p5_v;
-  int16_t sol_t_v;
-  int16_t raw_v;
-  int16_t sol_p1_c;
-  int16_t sol_p2_c;
-  int16_t sol_p3_c;
-  int16_t sol_p4_c;
-  int16_t sol_p5_c;
-  int16_t sol_t_c;
-  int16_t rst_3v3_c;
-  int16_t raw_c;
-  int16_t v3_main_c;
-  int16_t v3_com_c;
-  int16_t v3_2_c;
-  int16_t v5_c;
-  int16_t unreg_c;
-  int16_t v4_c;
-  int16_t batt_c;
-  int8_t rsv_cmd;
+  int16_t accl_x; //2
+	int16_t accl_y; //2
+	int16_t accl_z; //2
+	int16_t gyro_x; //2
+	int16_t gyro_y; //2 
+	int16_t gyro_z; //2
+	int16_t mag_x; //2 
+	int16_t mag_y; //2
+	int16_t mag_z; //2
+	int16_t temp_x; //2 -x 4
+	int16_t temp_x1; //2
+	int16_t temp_y; //2 +y 2
+	int16_t temp_y1; //2-y 5
+	int16_t temp_z; //+z 1
+	int16_t temp_z1; //-z 3
+	int16_t temp_bpb; //2
+	int16_t temp_obc; //2
+	int16_t temp_com; //2
+	int16_t temp_batt; //2
+	int16_t batt_volt; //2
+	int16_t sol_p1_v; //2
+	int16_t sol_p2_v; //2
+	int16_t sol_p3_v; //2
+	int16_t sol_p4_v; //2
+	int16_t sol_p5_v; //2
+	int16_t sol_t_v; //2
+	int16_t raw_v; //2
+	int16_t sol_p1_c; //2
+	int16_t sol_p2_c; //2
+	int16_t sol_p3_c; //2
+	int16_t sol_p4_c; //2
+	int16_t sol_p5_c; //2
+	int16_t sol_t_c; //2
+	int16_t rst_3v3_c; //2
+	int16_t raw_c; //2
+	int16_t v3_main_c; //2
+	int16_t v3_com_c; //2
+	int16_t v3_2_c; //2
+	int16_t v5_c; //2
+	int16_t unreg_c; //2
+	int16_t v4_c; //2
+	int16_t batt_c; //2
+	int8_t rsv_cmd; //1
 
-  int8_t ant_dep_stat;
-  int8_t ul_state;
-  int8_t oper_mode;
-  int8_t msn_flag;
-  int8_t rsv_flag;
-  int8_t kill_switch;
+	uint8_t ant_dep_stat; //1
+	uint8_t ul_state; //1
+	uint8_t oper_mode; //1
+	uint8_t msn_flag; //1
+	uint8_t rsv_flag; //1
+	uint8_t kill_switch; //1
+	uint8_t rst_counter; //1
 
-  int16_t ant_temp_out;
+  int16_t ant_temp_out; //2
+	uint8_t SAT_MODE; //1
 };
 
 struct reservation_command{
