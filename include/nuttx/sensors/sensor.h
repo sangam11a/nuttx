@@ -537,7 +537,10 @@ struct sensor_temp          /* Type: Ambient Temperature */
 
 struct sensor_rgb           /* Type: RGB */
 {
-  uint64_t timestamp;       /* Units is microseconds */
+  uint64_t timestamp;  
+       /* Units is microseconds */
+  
+	uint8_t SAT_MODE; //1
   int16_t accl_x; //2
 	int16_t accl_y; //2
 	int16_t accl_z; //2
@@ -582,16 +585,16 @@ struct sensor_rgb           /* Type: RGB */
 	int16_t batt_c; //2
 	int8_t rsv_cmd; //1
 
-	uint8_t ant_dep_stat; //1
+
+
+  uint8_t ant_dep_stat; //1
 	uint8_t ul_state; //1
+	int16_t ant_temp_out; //2
+  uint16_t rst_counter; //1
 	uint8_t oper_mode; //1
 	uint8_t msn_flag; //1
 	uint8_t rsv_flag; //1
 	uint8_t kill_switch; //1
-	uint8_t rst_counter; //1
-
-  int16_t ant_temp_out; //2
-	uint8_t SAT_MODE; //1
 };
 
 struct reservation_command{
